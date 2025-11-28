@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 =======
 # Scientific Document Summarization Framework (Demo)
 
