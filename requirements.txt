@@ -1,0 +1,32 @@
+# Core dependencies 
+numpy
+pandas
+scipy
+ 
+# NLP and text processing 
+nltk
+spacy
+transformers
+sentence-transformers
+keybert
+gensim
+ 
+# Deep Learning 
+torch
+accelerate
+ 
+# Evaluation 
+rouge-score
+bert-score
+evaluate
+ 
+# Utilities 
+tqdm
+pyyaml
+scikit-learn
+matplotlib
+seaborn
+jupyter
+ 
+# Document processing 
+pymupdf

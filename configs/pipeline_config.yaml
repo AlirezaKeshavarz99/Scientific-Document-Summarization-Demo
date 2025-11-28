@@ -1,0 +1,30 @@
+# Demo Pipeline Configuration
+pipeline:
+  phase: "both"
+  device: "cuda" if torch.cuda.is_available() else "cpu"
+  quantize: false  # Simplified for demo
+
+# Preprocessing
+preprocessing:
+  sections: ["abstract", "introduction", "methods", "results", "discussion", "conclusion"]
+  min_sentence_length: 10
+  max_sentence_length: 200
+
+# Feature Extraction (Demo version)
+feature_extraction:
+  sentence_model: "all-MiniLM-L6-v2"
+  keyphrase_model: "all-MiniLM-L6-v2"
+  top_n_keyphrases: 5
+
+# LLM Settings (Using smaller models for demo)
+llm:
+  models:
+    primary: "facebook/bart-large-cnn"  # Smaller, faster model for demo
+  max_length: 512
+  temperature: 0.7
+  top_p: 0.9
+
+# Summarization (Basic parameters)
+summarization:
+  max_section_length: 512
+  compression_ratio: 0.3

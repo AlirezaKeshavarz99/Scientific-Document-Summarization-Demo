@@ -1,0 +1,14 @@
+ABSTRACT
+This research presents a novel framework for multi-stage summarization of long scientific documents. Our approach addresses the limitations of traditional methods by leveraging pre-trained language models without requiring external training data. The framework demonstrates significant improvements in both automatic metrics and human evaluation.
+
+INTRODUCTION
+The exponential growth of scientific literature has created an urgent need for efficient summarization techniques. Existing methods often depend on extensive domain-specific training, limiting their adaptability across different research fields. This paper introduces a self-reliant framework that overcomes these limitations through innovative use of contrastive learning and hierarchical summarization.
+
+METHODS
+Our framework employs a two-phase architecture. The first phase performs section-level summarization using advanced prompt engineering with large language models. The second phase synthesizes these section summaries into a comprehensive document overview. We incorporate contrastive learning for semantic representation and Gini-based analysis for section importance weighting.
+
+RESULTS
+Experimental evaluation on the PubMed dataset shows our framework achieves a 25% improvement in ROUGE-1 scores compared to baseline methods. Human evaluation results average 4.3/5.0, confirming the effectiveness of our approach. The framework maintains strong performance across different scientific domains without requiring retraining.
+
+CONCLUSION
+The proposed self-reliant summarization framework offers a flexible and scalable solution for processing long scientific documents. Its ability to operate without external training data makes it particularly valuable for emerging research fields. Future work will explore applications in multidisciplinary scientific literature analysis.
