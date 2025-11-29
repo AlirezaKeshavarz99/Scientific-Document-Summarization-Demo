@@ -24,7 +24,7 @@ python -m venv venv
 
 
 If PowerShell blocks activation: run:
-
+```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\venv\Scripts\Activate.ps1
 
