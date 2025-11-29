@@ -21,10 +21,10 @@ A two-phase summarization pipeline for long scientific documents:
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
-
+---
 
 If PowerShell blocks activation: run:
-```powershell
+
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\venv\Scripts\Activate.ps1
 
