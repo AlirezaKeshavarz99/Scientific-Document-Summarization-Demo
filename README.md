@@ -1,38 +1,23 @@
-=======
 # Scientific Document Summarization Framework (Demo)
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)]
 
-**Demo Implementation of MSc Thesis:** *"An Innovative Self-Rellant Framework for Multi-Stage Summarization of Long Scientific Documents"*
+**Demo Implementation of MSc Thesis:** *"An Innovative Self-Reliant Framework for Multi-Stage Summarization of Long Scientific Documents"*
 
-## 🔬 Overview
+---
 
-This repository contains a **demonstration version** of the multi-stage summarization framework developed during my MSc research. The framework addresses the challenge of efficiently summarizing long scientific documents without requiring external training data or fine-tuning.
+**Demo Notice.** This repository contains a **cleaned, simplified demo** of the core pipeline used in my MSc thesis. The full research code, private datasets and trained weights are withheld due to an ongoing paper submission (ACL 2026) and dataset restrictions. This demo is runnable locally in CPU mode and includes fallback implementations so reviewers can run it without GPUs or large downloads.
 
-> **📝 Publication Status**: The complete implementation with novel algorithms is part of ongoing research being prepared for ACL 2026. This demo showcases the architecture and software engineering approach.
+## Elevator pitch
+A two-phase summarization pipeline for long scientific documents:
+1. Section-level summarization using semantic representations and contrastive learning (demo).
+2. Document-level synthesis using LLM-assisted fusion (demo uses a small HF model or a deterministic fallback).
 
-## 🏗️ Architecture
+---
 
-The framework employs a sophisticated two-phase approach:
+## Quickstart (Windows)
 
-### Phase 1: Section-Level Summarization
-- **Document Segmentation**: Identifies logical sections (Abstract, Introduction, Methods, etc.)
-- **Keyphrase Extraction**: Uses KeyBERT to extract salient terms
-- **Semantic Representation**: Contrastive learning for refined embeddings
-- **LLM Summarization**: Prompt engineering with large language models
-
-### Phase 2: Complete Document Summarization  
-- **Section Importance**: Cosine similarity and Gini-based analysis
-- **Length Allocation**: Exponential allocation algorithm
-- **Multi-Stage Synthesis**: Critical n-gram fusion and refinement
-- **Final Summary**: Coherent document-level overview
-
-## 🚀 Quick Start
-
-### Installation
-```bash
-git clone https://github.com/AlirezaKeshavarz99/Scientific-Document-Summarization-Demo.git
-cd Scientific-Document-Summarization-Demo
-pip install -r requirements.txt
->>>>>>> 835666ce5e97729aba823ea4462c55e65b6cc296
+1. Create & activate venv (PowerShell):
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
