@@ -6,7 +6,7 @@
 
 ---
 
-**Demo Notice.** This repository contains a **cleaned, simplified demo** of the core pipeline used in my MSc thesis. The full research code, private datasets and trained weights are withheld due to an ongoing paper submission (ACL 2026) and dataset restrictions. This demo is runnable locally in CPU mode and includes fallback implementations so reviewers can run it without GPUs or large downloads.
+**Demo Notice.** This repository contains a **cleaned, simplified demo** of the core pipeline used in my MSc thesis. The full research code, private datasets and trained weights are withheld due to an ongoing paper submission and dataset restrictions. This demo is runnable locally in CPU mode and includes fallback implementations so reviewers can run it without GPUs or large downloads.
 
 ## Elevator pitch
 A two-phase summarization pipeline for long scientific documents:
