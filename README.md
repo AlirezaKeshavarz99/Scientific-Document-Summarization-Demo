@@ -28,7 +28,7 @@ If PowerShell blocks activation: run:
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\venv\Scripts\Activate.ps1
 
-Install demo dependencies:
+2. Install demo dependencies:
 
 pip install -r requirements_demo.txt
 
