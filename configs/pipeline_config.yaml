@@ -1,30 +1,47 @@
-# Demo Pipeline Configuration
+# Demo-friendly config. For full research runs (private), switch device to "cuda" and
+# change llm.model_name to your Mistral model and use requirements_full.txt.
+
 pipeline:
-  phase: "both"
-  device: "cuda" if torch.cuda.is_available() else "cpu"
-  quantize: false  # Simplified for demo
+  phase: "both"           # section_only / document_only / both
+  device: "cpu"           # "cpu" for demo; set "cuda" privately for full runs
+  quantize: false
 
-# Preprocessing
 preprocessing:
-  sections: ["abstract", "introduction", "methods", "results", "discussion", "conclusion"]
-  min_sentence_length: 10
-  max_sentence_length: 200
+  spacy_model: "en_core_web_sm"   # demo fallback; thesis used en_core_sci_sm
+  sections_to_extract: ["abstract", "introduction", "methods", "results", "discussion", "conclusion"]
+  clean_html: true
+  remove_citations: true
+  min_sentence_length: 6
 
-# Feature Extraction (Demo version)
 feature_extraction:
-  sentence_model: "all-MiniLM-L6-v2"
-  keyphrase_model: "all-MiniLM-L6-v2"
-  top_n_keyphrases: 5
+  sentence_model: "sentence-transformers/all-MiniLM-L6-v2"
+  keyphrase:
+    model: "all-MiniLM-L6-v2"
+    diversity: 0.7
+    n_grams: [1, 2, 3]
+    top_n: 5
+  lda:
+    num_topics: 10
+    passes: 5
 
-# LLM Settings (Using smaller models for demo)
-llm:
-  models:
-    primary: "facebook/bart-large-cnn"  # Smaller, faster model for demo
-  max_length: 512
+contrastive_learning:
+  base_model: "sentence-transformers/all-MiniLM-L6-v2"
+  projection_dim: 64
+  batch_size: 16
+  learning_rate: 1e-4
+  epochs: 10
+  temperature: 0.07
+  similarity_threshold: 0.45
+
+summarization:
+  model_name: "facebook/bart-large-cnn"   # demo model; private research used Mistral-7B
+  load_in_8bit: false
+  max_length: 128
   temperature: 0.7
   top_p: 0.9
 
-# Summarization (Basic parameters)
-summarization:
-  max_section_length: 512
-  compression_ratio: 0.3
+evaluation:
+  metrics: ["rouge1", "rouge2", "rougeL"]
+  baseline_comparison: true
+
+seed: 42

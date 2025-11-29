@@ -1,41 +1,21 @@
-# Data
-data/raw/
-data/processed/
-data/outputs/
-
-# Models
-models/saved_models/
-models/contrastive/
-
-# Virtual environment
+# Virtual env
 venv/
-env/
-
-# Python
 __pycache__/
-*.py[cod]
-*.so
-.Python
-build/
-dist/
-*.egg-info/
+*.pyc
 
-# IDE
+# Outputs & models
+data/outputs/
+models/
+*.pt
+*.bin
+
+# IDEs
 .vscode/
 .idea/
-*.swp
-*.swo
+
+# Jupyter
+.ipynb_checkpoints/
 
 # OS
 .DS_Store
 Thumbs.db
-
-# Logs
-*.log
-
-# Temporary files
-*.tmp
-*.temp
-
-# Jupyter
-.ipynb_checkpoints
