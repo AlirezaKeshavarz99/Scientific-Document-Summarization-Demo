@@ -15,9 +15,48 @@ A two-phase summarization pipeline for long scientific documents:
 
 ---
 
-## Quickstart (Windows)
+## Quickstart (Windows PowerShell)
 
-1. Create & activate venv (PowerShell):
+1. Create & activate venv:
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
+
+
+If PowerShell blocks activation: run:
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\venv\Scripts\Activate.ps1
+
+Install demo dependencies:
+
+pip install -r requirements_demo.txt
+
+
+(Optional) download spaCy fallback model:
+
+python -m spacy download en_core_web_sm
+
+
+Run the demo:
+
+python -m scripts.run_demo --input examples\sample_paper.txt --output data\outputs\demo_summary.txt --device cpu
+type data\outputs\demo_summary.txt
+
+
+Run the contrastive demo:
+
+python -m src.contrastive.demo_contrastive
+
+
+Evaluate (optional):
+
+python -m scripts.evaluate_demo --reference examples\reference_summary.txt --hypothesis data\outputs\demo_summary.txt
+
+
+Contact / Full code access
+
+The full training scripts, dataset extraction, and final model weights are private until publication. If you need private access for review, please contact me and I can provide a private GitHub repository or run the code during a screen-share.
+
+Best,
+Alireza Keshavarz
