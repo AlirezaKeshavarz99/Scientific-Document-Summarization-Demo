@@ -21,41 +21,41 @@ A two-phase summarization pipeline for long scientific documents:
 ```powershell
 python -m venv venv
 .\venv\Scripts\Activate.ps1
-
+```
 
 If PowerShell blocks activation: run:
-
+```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\venv\Scripts\Activate.ps1
+```
 
-
-Install demo dependencies:
-
+2. Install demo dependencies:
+```powershell
 pip install -r requirements_demo.txt
+```
 
-
-(Optional) download spaCy fallback model:
-
+3. (Optional) download spaCy fallback model:
+```powershell
 python -m spacy download en_core_web_sm
+```
 
-
-Run the demo:
-
+4. Run the demo:
+```powershell
 python -m scripts.run_demo --input examples\sample_paper.txt --output data\outputs\demo_summary.txt --device cpu
 type data\outputs\demo_summary.txt
+```
 
-
-Run the contrastive demo:
-
+5. Run the contrastive demo:
+```powershell
 python -m src.contrastive.demo_contrastive
+```
 
-
-Evaluate (optional):
-
+6. Evaluate (optional):
+```powershell
 python -m scripts.evaluate_demo --reference examples\reference_summary.txt --hypothesis data\outputs\demo_summary.txt
+```
 
-
-Contact / Full code access
+## Contact / Full code access
 
 The full training scripts, dataset extraction, and final model weights are private until publication. If you need private access for review, please contact me and I can provide a private GitHub repository or run the code during a screen-share.
 
