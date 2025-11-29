@@ -1,3 +1,19 @@
+# Scientific-Document-Summarization-Demo
+
+**Demo Notice.** This repository contains a **cleaned, simplified demo** of the core pipeline used in my MSc thesis to illustrate architecture and implementation style. The full research code, private datasets and trained weights are withheld due to an ongoing paper submission and dataset restrictions. The demo is runnable with the provided sample data and CPU-friendly fallbacks.
+
+## Elevator pitch
+A two-phase summarization pipeline for long scientific documents:
+1. Section-level summarization using semantic embeddings and LLM prompts.
+2. Document-level synthesis that assembles section summaries into a final summary.
+
+## Quickstart (run demo)
+```bash
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python -m scripts.run_demo --input examples/sample_paper.txt --output outputs/demo_summary.txt --device cpu
+
 
 =======
 # Scientific Document Summarization Framework (Demo)
