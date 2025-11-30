@@ -8,6 +8,12 @@
 
 **Demo Notice.** This repository contains a **cleaned, simplified demo** of the core pipeline used in my MSc thesis. The full research code, private datasets and trained weights are withheld due to an ongoing paper submission and dataset restrictions. This demo is runnable locally in CPU mode and includes fallback implementations so reviewers can run it without GPUs or large downloads.
 
+## Contact / Full code access
+
+The full training scripts, dataset extraction, and final model weights are private until publication. If you need private access for review, please contact me and I can provide a private GitHub repository or run the code during a screen-share.
+
+a.keshavarz@khu.ac.ir
+
 ## Elevator pitch
 A two-phase summarization pipeline for long scientific documents:
 1. Section-level summarization using semantic representations and contrastive learning (demo).
@@ -54,10 +60,3 @@ python -m src.contrastive.demo_contrastive
 ```powershell
 python -m scripts.evaluate_demo --reference examples\reference_summary.txt --hypothesis data\outputs\demo_summary.txt
 ```
-
-## Contact / Full code access
-
-The full training scripts, dataset extraction, and final model weights are private until publication. If you need private access for review, please contact me and I can provide a private GitHub repository or run the code during a screen-share.
-
-Best,
-Alireza Keshavarz
