@@ -1,21 +1,72 @@
-# Virtual env
-venv/
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
 
-# Outputs & models
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# Outputs & data
 data/outputs/
-models/
+data/processed/
+data/cache/
+*.pkl
+*.npy
+*.h5
+
+# Models & checkpoints
+models/saved_models/
+models/checkpoints/
 *.pt
+*.pth
 *.bin
+*.onnx
+
+# Logs
+*.log
+logs/
+*.log.*
 
 # IDEs
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
 # Jupyter
 .ipynb_checkpoints/
+*.ipynb
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
+
+# Backup files
+*.backup
+*.backup2
+*.bak
+
+# Environment variables
+.env
+.env.local
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Temporary files
+*.tmp
+tmp/
+temp/

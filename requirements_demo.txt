@@ -1,10 +1,80 @@
-numpy>=1.23
-pandas>=1.5
-torch>=2.0.0
-transformers>=4.35.0
-sentence-transformers>=2.2.2
-scikit-learn>=1.2
-pyyaml>=6.0
-rouge-score>=0.1.2
-spacy>=3.5.0
-nltk>=3.8.0
+# ============================================================================
+# Scientific Document Summarization Framework - Demo Dependencies
+# ============================================================================
+# Python 3.8+
+# Author: Alireza Keshavarz
+# Last Updated: December 2025
+# ============================================================================
+
+# Core Scientific Computing
+# ----------------------------------------------------------------------------
+numpy>=1.23.0,<2.0.0          # Numerical operations
+pandas>=1.5.0,<3.0.0           # Data manipulation
+scikit-learn>=1.2.0,<2.0.0     # Machine learning utilities
+
+# Deep Learning & NLP
+# ----------------------------------------------------------------------------
+torch>=2.0.0,<3.0.0                    # PyTorch framework
+transformers>=4.35.0,<5.0.0            # Hugging Face transformers (LLMs)
+sentence-transformers>=2.2.2,<3.0.0     # Sentence embeddings (SBERT)
+accelerate>=0.20.0                      # Optimized inference
+bitsandbytes>=0.41.0                    # 8-bit quantization
+
+# NLP Processing
+# ----------------------------------------------------------------------------
+spacy>=3.5.0,<4.0.0            # NLP preprocessing & tokenization
+nltk>=3.8.0,<4.0.0             # Natural language toolkit
+
+# Feature Extraction
+# ----------------------------------------------------------------------------
+keybert>=0.7.0                 # Keyphrase extraction
+gensim>=4.3.0                  # Topic modeling (LDA)
+
+# Evaluation Metrics
+# ----------------------------------------------------------------------------
+rouge-score>=0.1.2             # ROUGE metrics
+bert-score>=0.3.13             # BERTScore semantic similarity
+# Note: METEOR score included in NLTK
+
+# Utilities
+# ----------------------------------------------------------------------------
+pyyaml>=6.0                    # Configuration files
+tqdm>=4.65.0                   # Progress bars
+python-dotenv>=1.0.0           # Environment variables
+colorama>=0.4.6                # Colored terminal output
+
+# Testing (Optional - for development)
+# ----------------------------------------------------------------------------
+pytest>=7.4.0                  # Unit testing
+pytest-cov>=4.1.0              # Code coverage
+
+# ============================================================================
+# Installation Instructions:
+# ----------------------------------------------------------------------------
+# 1. Create virtual environment:
+#    python -m venv venv
+#
+# 2. Activate virtual environment:
+#    Windows: .\venv\Scripts\Activate.ps1
+#    Linux/Mac: source venv/bin/activate
+#
+# 3. Install dependencies:
+#    pip install -r requirements_demo.txt
+#
+# 4. Download spaCy model:
+#    python -m spacy download en_core_web_sm
+#
+# 5. Verify installation:
+#    python -c "import src; print('Success!')"
+# ============================================================================
+
+# Optional: Scientific spaCy for better accuracy
+# ----------------------------------------------------------------------------
+# pip install scispacy
+# pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.1/en_core_sci_sm-0.5.1.tar.gz
+
+# GPU Support (Optional - for CUDA acceleration)
+# ----------------------------------------------------------------------------
+# Visit https://pytorch.org/ and install CUDA-enabled PyTorch:
+# Example for CUDA 11.8:
+# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
