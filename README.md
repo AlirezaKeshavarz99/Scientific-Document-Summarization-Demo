@@ -123,13 +123,13 @@ These results establish a baseline for the novel task of section-level summariza
 
 For the standard document-level summarization task, the framework's performance is competitive with state-of-the-art models fine-tuned on PubMed, as shown in the comparison below.
 
-| Model / Framework | Training Data | ROUGE-1 | ROUGE-2 | ROUGE-L | BERTScore |
-|--------|---------------|----------------|----------------|----------------| ----------------|
-| **This Framework** | **No Fine-Tuning** (Zero-shot) | **44.0** | **20.0** | **40.0** | **84.0** |
-| BART (Benchmark) | In-domain (PubMed only) | 42.0 | 18.2 | 37.9 | 90.1 |
-| BART (Benchmark) | Mixed-domain | 41.7 | 18.1 | 37.6 | 89.9 |
-| PEGASUS (Benchmark) | In-domain (PubMed only) | 39.8 | 15.8 | 36.5 | 89.5 |
-| T5 (Benchmark) | In-domain (PubMed only) | 40.2 | 16.3 | 36.6 | 89.4 |
+| Model / Framework | Training Data | ROUGE-2 | BERTScore |
+|--------|---------------|----------------|----------------|
+| **This Framework** | **No Fine-Tuning** (Zero-shot) | **20.0** | **84.0** |
+| BART (Benchmark) | In-domain (PubMed only) | 18.2 | 90.1 |
+| BART (Benchmark) | Mixed-domain | 18.1 | 89.9 |
+| PEGASUS (Benchmark) | In-domain (PubMed only)| 15.8| 89.5 |
+| T5 (Benchmark) | In-domain (PubMed only) | 16.3 | 89.4 |
 
 ---
 
