@@ -110,10 +110,10 @@ This framework introduces and evaluates the task of generating individual summar
 
 | Metric | Section-Level |
 |--------|---------------|
-| **ROUGE-1 F1** | 0.50 |
-| **ROUGE-2 F1** | 0.25 |
-| **ROUGE-L F1** | 0.45 |
-| **BERTScore F1** | 0.88 |
+| **ROUGE-1 F1** | 50.0 |
+| **ROUGE-2 F1** | 25.0 |
+| **ROUGE-L F1** | 45.0 |
+| **BERTScore F1** | 88.0 |
 | **Compression** | ~75% |
 
 These results establish a baseline for the novel task of section-level summarization on PubMed articles.
