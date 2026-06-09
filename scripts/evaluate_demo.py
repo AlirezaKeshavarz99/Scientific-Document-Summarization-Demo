@@ -1,145 +1,149 @@
 # scripts/evaluate_demo.py
 """
-Evaluation Script
+Evaluation script.
 
-Evaluates generated summaries against reference summaries using multiple metrics:
-- ROUGE (ROUGE-1, ROUGE-2, ROUGE-L)
-- BERTScore
-- METEOR
-- Compression statistics
+Evaluates a generated summary against a reference summary using ROUGE,
+BERTScore, METEOR, and compression statistics.
 """
 
 import argparse
-import os
-import sys
 import logging
+import sys
 from pathlib import Path
 
 # Add project root to path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.evaluation.metrics import evaluate_pair, format_evaluation_results
 
-logging.basicConfig(level=logging.INFO)
+
 logger = logging.getLogger(__name__)
+ALLOWED_METRICS = {"rouge", "bertscore", "meteor", "compression"}
 
 
 def parse_args():
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
-        description="Evaluate generated summaries against reference",
+        description="Evaluate generated summaries against reference summaries",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Evaluate with all metrics
   python scripts/evaluate_demo.py --reference ref.txt --hypothesis gen.txt
-  
-  # Evaluate with specific metrics
   python scripts/evaluate_demo.py --reference ref.txt --hypothesis gen.txt --metrics rouge,bertscore
-  
-  # Save results to file
   python scripts/evaluate_demo.py --reference ref.txt --hypothesis gen.txt --output results.txt
         """
     )
-    
+
     parser.add_argument(
         "--reference",
         required=True,
-        help="Path to reference (gold) summary file"
+        help="Path to reference summary file"
     )
-    
+
     parser.add_argument(
         "--hypothesis",
         required=True,
-        help="Path to generated (system) summary file"
+        help="Path to generated summary file"
     )
-    
+
     parser.add_argument(
         "--metrics",
         default="rouge,bertscore,meteor,compression",
-        help="Comma-separated list of metrics to compute (default: all)"
+        help="Comma-separated list of metrics to compute"
     )
-    
+
     parser.add_argument(
         "--output",
-        help="Path to save evaluation results (optional)"
+        help="Path to save the formatted evaluation results"
     )
-    
+
     parser.add_argument(
         "--verbose",
         action="store_true",
-        help="Enable verbose output"
+        help="Enable verbose logging"
     )
-    
+
     return parser.parse_args()
+
+
+def read_text_file(path: str) -> str:
+    """Read a UTF-8 text file."""
+    file_path = Path(path)
+    if not file_path.exists():
+        raise FileNotFoundError(f"File not found: {path}")
+
+    return file_path.read_text(encoding="utf-8").strip()
+
+
+def parse_metric_list(metric_string: str):
+    """Parse and validate metric names."""
+    metrics = [m.strip().lower() for m in metric_string.split(",") if m.strip()]
+    unknown = [m for m in metrics if m not in ALLOWED_METRICS]
+
+    if unknown:
+        raise ValueError(
+            f"Unknown metric(s): {', '.join(unknown)}. "
+            f"Allowed metrics are: {', '.join(sorted(ALLOWED_METRICS))}"
+        )
+
+    return metrics
 
 
 def main():
     """Main execution function."""
     args = parse_args()
-    
-    # Validate inputs
-    if not os.path.exists(args.reference):
-        logger.error(f"Reference file not found: {args.reference}")
-        sys.exit(1)
-    
-    if not os.path.exists(args.hypothesis):
-        logger.error(f"Hypothesis file not found: {args.hypothesis}")
-        sys.exit(1)
-    
+
+    logging.basicConfig(
+        level=logging.DEBUG if args.verbose else logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+
     try:
-        # Load texts
-        logger.info(f"Loading reference from: {args.reference}")
-        with open(args.reference, "r", encoding="utf-8") as f:
-            reference = f.read().strip()
-        
-        logger.info(f"Loading hypothesis from: {args.hypothesis}")
-        with open(args.hypothesis, "r", encoding="utf-8") as f:
-            hypothesis = f.read().strip()
-        
-        # Parse metrics
-        metrics = [m.strip() for m in args.metrics.split(",")]
-        
-        # Evaluate
-        logger.info(f"Computing metrics: {', '.join(metrics)}")
+        reference = read_text_file(args.reference)
+        hypothesis = read_text_file(args.hypothesis)
+
+        metrics = parse_metric_list(args.metrics)
+
+        logger.info("Computing metrics: %s", ", ".join(metrics))
         results = evaluate_pair(reference, hypothesis, metrics=metrics)
-        
-        # Format results
+
         formatted_results = format_evaluation_results(results)
-        
-        # Print results
         print("\n" + formatted_results)
-        
-        # Save results if output specified
+
         if args.output:
-            os.makedirs(os.path.dirname(args.output) or ".", exist_ok=True)
-            with open(args.output, "w", encoding="utf-8") as f:
-                f.write(formatted_results)
-            logger.info(f"\n✓ Results saved to: {args.output}")
-        
-        # Print quick summary
-        print("\n" + "="*60)
+            output_path = Path(args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(formatted_results, encoding="utf-8")
+            logger.info("Results saved to: %s", args.output)
+
+        print("\n" + "=" * 60)
         print("QUICK SUMMARY")
-        print("="*60)
-        
+        print("=" * 60)
+
         if "rouge" in results:
             rouge_l = results["rouge"].get("rougeL", {})
-            print(f"ROUGE-L F1:    {rouge_l.get('fmeasure', 0):.4f}")
-        
+            print(f"ROUGE-L F1:   {rouge_l.get('fmeasure', 0):.4f}")
+
         if "bertscore" in results:
-            print(f"BERTScore F1:  {results['bertscore'].get('f1', 0):.4f}")
-        
+            print(f"BERTScore F1: {results['bertscore'].get('f1', 0):.4f}")
+
         if "meteor" in results:
-            print(f"METEOR:        {results['meteor']:.4f}")
-        
+            print(f"METEOR:       {results['meteor']:.4f}")
+
         if "compression" in results:
-            comp = results["compression"]["word_compression"]
-            print(f"Compression:   {comp:.1%}")
-        
-        print("="*60 + "\n")
-        
+            comp = results["compression"].get("word_compression", 0.0)
+            print(f"Compression:  {comp:.1%}")
+
+        print("=" * 60 + "\n")
+
+    except FileNotFoundError as e:
+        logger.error(str(e))
+        sys.exit(1)
+    except ValueError as e:
+        logger.error(str(e))
+        sys.exit(1)
     except Exception as e:
-        logger.error(f"Error during evaluation: {e}", exc_info=True)
+        logger.error("Error during evaluation: %s", e, exc_info=True)
         sys.exit(1)
 
 
