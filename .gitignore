@@ -13,9 +13,9 @@ build/
 venv/
 env/
 ENV/
-.venv
+.venv/
 
-# Outputs & data
+# Outputs & generated data
 data/outputs/
 data/processed/
 data/cache/
@@ -45,28 +45,33 @@ logs/
 
 # Jupyter
 .ipynb_checkpoints/
-*.ipynb
+# Uncomment this if you do not want notebooks tracked
+# *.ipynb
+
+# Python tooling caches
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.nox/
 
 # OS
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Backup files
+# Backup and temporary files
 *.backup
 *.backup2
 *.bak
+*.tmp
+tmp/
+temp/
 
 # Environment variables
 .env
 .env.local
-
-# Test coverage
-.coverage
-htmlcov/
-.pytest_cache/
-
-# Temporary files
-*.tmp
-tmp/
-temp/
+.python-version
