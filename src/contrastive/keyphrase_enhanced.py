@@ -1,122 +1,105 @@
-import os
-import random
-import numpy as np
-from sentence_transformers import SentenceTransformer
-import matplotlib.pyplot as plt
+# src/contrastive/keyphrase_enhanced.py
 
-MAX_KEYPHRASE_PAIRS = 1000
+import numpy as np
+import random
+from sentence_transformers import SentenceTransformer
+
+MAX_PAIRS = 1000
 KEYPHRASE_WEIGHT = 2.0
 SIMILARITY_THRESHOLD = 0.45
 
-def cos_sim(a, b):
-    """Cosine similarity for 1-D numpy arrays."""
+
+def cosine_sim(a, b):
     a = np.asarray(a)
     b = np.asarray(b)
-    denom = (np.linalg.norm(a) * np.linalg.norm(b))
+    denom = np.linalg.norm(a) * np.linalg.norm(b)
     if denom == 0:
         return 0.0
     return float(np.dot(a, b) / denom)
 
-def get_keyphrase_embeddings(section_keyphrases, model):
+
+def load_model(model_name="all-MiniLM-L6-v2"):
+    """Load sentence transformer model."""
+    return SentenceTransformer(model_name)
+
+
+def encode_keyphrases(section_keyphrases, model):
     """
-    Encode keyphrases for each section. 
-    `section_keyphrases` is dict: section_name -> [(kp, score), ...]
-    Returns dict: section_name -> numpy array (n_keyphrases, dim)
+    section_keyphrases: dict(section -> [(phrase, score)])
+    returns: dict(section -> embeddings)
     """
     out = {}
-    for sec, kp_pairs in section_keyphrases.items():
-        keyphrases = [p[0] for p in kp_pairs]
-        if not keyphrases:
+
+    for sec, phrases in section_keyphrases.items():
+        texts = [p[0] for p in phrases]
+
+        if not texts:
             continue
-        emb = model.encode(keyphrases, convert_to_numpy=True)
-        out[sec] = emb
+
+        out[sec] = model.encode(texts, convert_to_numpy=True)
+
     return out
 
-def create_keyphrase_positive_pairs(section_matrices, keyphrase_embeddings, sample_limit=MAX_KEYPHRASE_PAIRS):
-    """
-    For each section, pair each keyphrase embedding with each sentence embedding
-    from the same section (sampling if too many).
-    section_matrices: dict section -> [sentence_embedding_numpy,...]
-    keyphrase_embeddings: dict section -> numpy array (k, dim)
-    Returns list of (emb_kp, emb_sent, weight), similarities list, info dict.
-    """
-    positives = []
-    similarities = []
-    info = {}
-    for sec, sents in section_matrices.items():
-        kp_embs = keyphrase_embeddings.get(sec)
-        if kp_embs is None:
-            info[sec] = {'kp':0,'sents':len(sents),'pairs':0}
-            continue
-        potential_pairs = len(kp_embs) * len(sents)
-        sample_factor = 1.0 if potential_pairs <= sample_limit else (sample_limit / potential_pairs)
-        cnt = 0
-        sim_sum = 0.0
-        for i in range(len(kp_embs)):
-            for j in range(len(sents)):
-                if sample_factor < 1.0 and random.random() > sample_factor:
-                    continue
-                sim = cos_sim(kp_embs[i], sents[j])
-                positives.append((kp_embs[i], sents[j], KEYPHRASE_WEIGHT))
-                similarities.append(sim)
-                sim_sum += sim
-                cnt += 1
-                if cnt >= sample_limit:
-                    break
-            if cnt >= sample_limit:
-                break
-        info[sec] = {'kp':len(kp_embs),'sents':len(sents),'pairs':cnt,'avg_sim': (sim_sum/cnt if cnt>0 else 0)}
-    return positives, similarities, info
 
-def create_keyphrase_negative_pairs(section_matrices, keyphrase_embeddings, threshold=SIMILARITY_THRESHOLD, sample_limit=MAX_KEYPHRASE_PAIRS):
+def create_positive_pairs(section_sents, kp_embeddings, sample_limit=MAX_PAIRS):
     """
-    Pair keyphrases of one section with sentences from other sections and filter out
-    any pair with similarity > threshold.
+    Pair keyphrases with sentences from same section.
     """
-    negatives = []
-    similarities = []
-    info = {}
-    sections = list(section_matrices.keys())
-    for sec1, kp_embs in keyphrase_embeddings.items():
-        info[sec1] = {}
+    pairs = []
+    sims = []
+
+    for sec, sents in section_sents.items():
+        kp = kp_embeddings.get(sec)
+
+        if kp is None:
+            continue
+
+        for i in range(len(kp)):
+            for j in range(len(sents)):
+
+                if len(pairs) >= sample_limit:
+                    return pairs, sims
+
+                sim = cosine_sim(kp[i], sents[j])
+                pairs.append((kp[i], sents[j], KEYPHRASE_WEIGHT))
+                sims.append(sim)
+
+    return pairs, sims
+
+
+def create_negative_pairs(section_sents, kp_embeddings, sample_limit=MAX_PAIRS):
+    """
+    Keyphrases paired with sentences from OTHER sections.
+    """
+    pairs = []
+    sims = []
+
+    sections = list(section_sents.keys())
+
+    for sec1, kp in kp_embeddings.items():
         for sec2 in sections:
             if sec1 == sec2:
                 continue
-            sents = section_matrices.get(sec2)
-            if not sents:
-                info[sec1][sec2] = {'pairs':0,'filtered':0,'avg_sim':0}
-                continue
-            potential_pairs = len(kp_embs) * len(sents)
-            sample_factor = 1.0 if potential_pairs <= sample_limit else (sample_limit / potential_pairs)
-            cnt = 0; filt = 0; sim_sum=0.0
-            for i in range(len(kp_embs)):
+
+            sents = section_sents.get(sec2, [])
+
+            for i in range(len(kp)):
                 for j in range(len(sents)):
-                    if sample_factor < 1.0 and random.random() > sample_factor:
-                        continue
-                    sim = cos_sim(kp_embs[i], sents[j])
-                    if sim > threshold:
-                        filt += 1
-                        continue
-                    negatives.append((kp_embs[i], sents[j], KEYPHRASE_WEIGHT))
-                    similarities.append(sim)
-                    sim_sum += sim
-                    cnt += 1
-                    if cnt >= sample_limit:
-                        break
-                if cnt >= sample_limit:
-                    break
-            info[sec1][sec2] = {'pairs':cnt,'filtered':filt,'avg_sim': (sim_sum/cnt if cnt>0 else 0)}
-    return negatives, similarities, info
 
-def combine_pairs(kp_pos, orig_pos, kp_neg, orig_neg):
-    """
-    Simple concatenation that keeps weight field (tuple size = 3).
-    Accepts lists.
-    """
-    combined_pos = list(kp_pos) + list(orig_pos or [])
-    combined_neg = list(kp_neg) + list(orig_neg or [])
-    return combined_pos, combined_neg
+                    if len(pairs) >= sample_limit:
+                        return pairs, sims
 
-# small helper to get a model (so demo_run.py can call it)
-def load_model(name='all-MiniLM-L6-v2'):
-    return SentenceTransformer(name)
+                    sim = cosine_sim(kp[i], sents[j])
+
+                    if sim > SIMILARITY_THRESHOLD:
+                        continue
+
+                    pairs.append((kp[i], sents[j], KEYPHRASE_WEIGHT))
+                    sims.append(sim)
+
+    return pairs, sims
+
+
+def combine_pairs(pos_kp, neg_kp):
+    """Simple merge utility."""
+    return list(pos_kp), list(neg_kp)
