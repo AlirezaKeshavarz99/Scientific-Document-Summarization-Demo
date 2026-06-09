@@ -223,7 +223,7 @@ This project is released under the MIT License. See the `LICENSE` file for addit
 
 **Alireza Keshavarz**
 
-* Email: [a.keshavarz@khu.ac.ir](mailto:a.keshavarz@khu.ac.ir)
+* Email: [alirezakeshavarz.business@gmail.com](mailto:alirezakeshavarz.business@gmail.com)
 * LinkedIn: https://www.linkedin.com/in/alireza-keshavarz-ai
 * GitHub: https://github.com/AlirezaKeshavarz99
 
